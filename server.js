@@ -2,11 +2,17 @@
 require('dotenv').config(); // ตรวจสอบให้แน่ใจว่าโหลด .env ก่อนใช้ค่า
 const express = require('express');
 const db = require('./src/config/db'); // อิมพอร์ตการเชื่อมต่อฐานข้อมูล
-
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const masterEquipmentRoutes = require('./src/routes/masterEquipmentRoutes');
 const masterEquipmentTypeRoutes = require ('./src/routes/masterEquipmentTypeRoutes')
+
+// ใช้ cors middleware
+app.use(cors({
+  origin: 'http://localhost:5173' // อนุญาตเฉพาะ Origin ของ React App ของคุณ
+  // หรือ origin: '*' เพื่ออนุญาตทุก Origin (ไม่แนะนำสำหรับ Production)
+}));
 
 // Middleware
 app.use(express.json()); // สำหรับ Parse JSON body ของ request

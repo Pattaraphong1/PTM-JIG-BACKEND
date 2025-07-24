@@ -5,7 +5,7 @@ const MasterEquipmentModel = {
     // เมธอดสำหรับดึงข้อมูลผู้ใช้ทั้งหมด
     getAllMasterEquipment: async () => {
         try {
-            const result = await db.query('SELECT * FROM master_equipments');
+            const result = await db.query('SELECT * FROM master_equipments LIMIT 100');
             return result.rows;
         } catch (err) {
             throw new Error('Error fetching all master Equipments: ' + err.message);
