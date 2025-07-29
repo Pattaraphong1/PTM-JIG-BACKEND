@@ -3,10 +3,14 @@ require('dotenv').config(); // ตรวจสอบให้แน่ใจว�
 const express = require('express');
 const db = require('./src/config/db'); // อิมพอร์ตการเชื่อมต่อฐานข้อมูล
 
+const cors = require('cors');
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 const masterEquipmentRoutes = require('./src/routes/masterEquipmentRoutes');
 const masterEquipmentTypeRoutes = require ('./src/routes/masterEquipmentTypeRoutes')
+
+
+app.use(cors());
 
 // Middleware
 app.use(express.json()); // สำหรับ Parse JSON body ของ request
@@ -17,7 +21,7 @@ app.use('/api/allMasterEquipment', masterEquipmentRoutes);
 // All Master Equipments Type
 app.use('/api/allMasterEquipmentType', masterEquipmentTypeRoutes);
 
- // app.get('/allMasterEquipment', async (req, res) => {
+//  app.get('/allMasterEquipment', async (req, res) => {
 //     try {
 //         const result = await db.query('SELECT * FROM master_equipments'); // สมมติว่ามีตาราง users
 //         res.status(200).json(result.rows);

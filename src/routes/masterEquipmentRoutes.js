@@ -4,8 +4,6 @@ const masterEquipmentControllers = require('../controllers/masterEquipmentContro
 
 const MasterEquipmentModel = require('../models/masterEquipmentModel');
 
-//router.get('/',masterEquipmentControllers.getAllMasterEquipment)
-
 router.get('/', async (req, res) => {
     try {
         const masterEquipments = await MasterEquipmentModel.getAllMasterEquipment();
