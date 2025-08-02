@@ -5,58 +5,53 @@ const MasterEquipmentModel = {
     // เมธอดสำหรับดึงข้อมูลผู้ใช้ทั้งหมด
     getAllMasterEquipment: async () => {
         try {
-            const result = await db.query('SELECT * FROM master_equipments LIMIT 100');
+            // const result = await db.query('SELECT * FROM master_equipments LIMIT 100');
+            const result = await db.query('SELECT * FROM master_equipments');
             return result.rows;
         } catch (err) {
             throw new Error('Error fetching all master Equipments: ' + err.message);
         }
     },
+    
+    // เมธอดใหม่สำหรับเพิ่มข้อมูลอุปกรณ์หลัก
+    addMasterEquipment: async (equipment) => {
+        console.log("Add Master equipment");
+        const {
+            equipment_id, jig_name, jig_number, marker, suffix_no, serial_no,
+            asset_no, type, photo, respond, section, control_no, application_model,
+            entry_date, issue_date, calibration_date, next_calibration_date, shelf,
+            floor, location, calibration_control, remark, status, create_by, update_by
+        } = equipment;
 
-    // // เมธอดสำหรับดึงข้อมูลผู้ใช้ตาม ID
-    // getUserById: async (id) => {
-    //     try {
-    //         const result = await db.query('SELECT * FROM users WHERE id = $1', [id]);
-    //         return result.rows[0]; // คืนค่าผู้ใช้คนแรกที่พบ (หรือ undefined หากไม่พบ)
-    //     } catch (err) {
-    //         throw new Error('Error fetching user by ID: ' + err.message);
-    //     }
-    // },
+        // คำสั่ง SQL สำหรับการ INSERT ข้อมูล
+        const sql = `
+            INSERT INTO master_equipments (
+                equipment_id, jig_name, jig_number, marker, suffix_no, serial_no,
+                asset_no, type, photo, respond, section, control_no, application_model,
+                entry_date, issue_date, calibration_date, next_calibration_date, shelf,
+                floor, location, calibration_control, remark, status, create_date, create_by,
+                update_date, update_by
+            ) VALUES (
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16,
+                $17, $18, $19, $20, $21, $22, $23, NOW(), $24, NOW(), $25
+            ) RETURNING *;
+        `;
+        // ค่าที่จะใช้แทน $1, $2, ... ในคำสั่ง SQL
+        const values = [
+            equipment_id, jig_name, jig_number, marker, suffix_no, serial_no,
+            asset_no, type, photo, respond, section, control_no, application_model,
+            entry_date, issue_date, calibration_date, next_calibration_date, shelf,
+            floor, location, calibration_control, remark, status, create_by, update_by
+        ];
 
-    // // เมธอดสำหรับสร้างผู้ใช้ใหม่
-    // createUser: async (name, email) => {
-    //     try {
-    //         const result = await db.query(
-    //             'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
-    //             [name, email]
-    //         );
-    //         return result.rows[0]; // คืนค่าผู้ใช้ที่สร้างใหม่
-    //     } catch (err) {
-    //         throw new Error('Error creating user: ' + err.message);
-    //     }
-    // },
-
-    // // เมธอดสำหรับอัปเดตข้อมูลผู้ใช้
-    // updateUser: async (id, name, email) => {
-    //     try {
-    //         const result = await db.query(
-    //             'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
-    //             [name, email, id]
-    //         );
-    //         return result.rows[0]; // คืนค่าผู้ใช้ที่อัปเดตแล้ว
-    //     } catch (err) {
-    //         throw new Error('Error updating user: ' + err.message);
-    //     }
-    // },
-
-    // // เมธอดสำหรับลบผู้ใช้
-    // deleteUser: async (id) => {
-    //     try {
-    //         const result = await db.query('DELETE FROM users WHERE id = $1 RETURNING *', [id]);
-    //         return result.rows[0]; // คืนค่าผู้ใช้ที่ถูกลบ
-    //     } catch (err) {
-    //         throw new Error('Error deleting user: ' + err.message);
-    //     }
-    // }
+        try {
+            const result = await db.query(sql, values);
+            return result.rows[0]; // ส่งข้อมูลที่เพิ่มเข้าไปกลับมา
+        } catch (err) {
+            console.error('Error in addMasterEquipment model:', err.message);
+            throw new Error('Error adding new master equipment: ' + err.message);
+        }
+    }
 };
 
 module.exports = MasterEquipmentModel;

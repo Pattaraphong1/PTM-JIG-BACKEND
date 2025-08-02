@@ -7,10 +7,11 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const masterEquipmentRoutes = require('./src/routes/masterEquipmentRoutes');
-const masterEquipmentTypeRoutes = require ('./src/routes/masterEquipmentTypeRoutes')
+const masterEquipmentTypeRoutes = require ('./src/routes/masterEquipmentTypeRoutes');
+const { addMasterEquipment } = require('./src/models/masterEquipmentModel');
 
 
-app.use(cors());
+
 
 // ใช้ cors middleware
 app.use(cors({
@@ -18,9 +19,9 @@ app.use(cors({
   // หรือ origin: '*' เพื่ออนุญาตทุก Origin (ไม่แนะนำสำหรับ Production)
 }));
 
-
 // Middleware
 app.use(express.json()); // สำหรับ Parse JSON body ของ request
+app.use(cors());
 
 // All Master Equipments
 app.use('/api/allMasterEquipment', masterEquipmentRoutes);
@@ -28,32 +29,7 @@ app.use('/api/allMasterEquipment', masterEquipmentRoutes);
 // All Master Equipments Type
 app.use('/api/allMasterEquipmentType', masterEquipmentTypeRoutes);
 
-//  app.get('/allMasterEquipment', async (req, res) => {
-//     try {
-//         const result = await db.query('SELECT * FROM master_equipments'); // สมมติว่ามีตาราง users
-//         res.status(200).json(result.rows);
-//     } catch (err) {
-//         console.error(err.message);
-//         res.status(500).send('Server Error');
-//     }
-// });
-
-// ทดสอบ API Endpoint: เพิ่มผู้ใช้ใหม่
-// app.post('/users', async (req, res) => {
-//     const { name, email } = req.body;
-//     try {
-//         const result = await db.query(
-//             'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
-//             [name, email]
-//         );
-//         res.status(201).json(result.rows[0]);
-//     } catch (err) {
-//         console.error(err.message);
-//         res.status(500).send('Server Error');
-//     }
-// });
-
-
+app.use('/api/addMasterEquipment',masterEquipmentRoutes)
 
 // Start the server
 app.listen(PORT, () => {
